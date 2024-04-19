@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TexoIt.Movies.Repository\TexoIt.Movies.Data.csproj" />
+    <ProjectReference Include="..\TexoIt.Movies.Services\TexoIt.Movies.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="movielist %282%29 %282%29 %282%29 %281%29 %281%29 %281%29 %281%29.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

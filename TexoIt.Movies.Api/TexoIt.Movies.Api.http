@@ -1,0 +1,6 @@
+@TexoIt.Movies.Api_HostAddress = http://localhost:5270
+
+GET {{TexoIt.Movies.Api_HostAddress}}/movies/
+Accept: application/json
+
+###
