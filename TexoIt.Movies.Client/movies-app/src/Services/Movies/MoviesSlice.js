@@ -33,16 +33,17 @@ export const getWinnersByYear = createAsyncThunk('movies/getWinnersByYear', asyn
     return response.data;
 });
 
+export const initialState = {
+    moviesList: {},
+    yearsWithMultipleWinners: {},
+    studiosWithWinCont: {},
+    maxMinIntervalsWithWins: {},
+    winnersByYear: [],
+}
 
 export const moviesSlice = createSlice({
     name: 'movies',
-    initialState: {
-        moviesList: {},
-        yearsWithMultipleWinners: {},
-        studiosWithWinCont: {},
-        maxMinIntervalsWithWins: {},
-        winnersByYear: [],
-    },
+    initialState: initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getAllMovies.fulfilled, (state, action) => {

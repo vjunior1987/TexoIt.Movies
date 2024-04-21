@@ -1,37 +1,131 @@
-import reducer, { getAllMovies } from './MoviesSlice'
-import moviesDataService from './Movies.service';
+// Arrange
+import reducer, {
+    initialState,
+    getAllMovies,
+    getYearsWithMultipleWinners,
+    getStudiosWithWinCount,
+    getMaxMinWinIntervalForProducers,
+    getWinnersByYear,
+} from './MoviesSlice';
+import * as testUtils from '../../Utils/test-utils';
+import store from '../store';
 
-const mockData = {
-    totalPages: 11,
-    content: [
-        {
-            id: 1,
-            year: 1992,
-            title: 'title 1',
-            studios: ['studio 1', 'studio 2'],
-            producers: ['producer 1', 'producer 2'],
-            winner: true,
-        },
-        {
-            id: 2,
-            year: 1993,
-            title: 'title 2',
-            studios: ['studio 3', 'studio 4'],
-            producers: ['producer 3', 'producer 4'],
-            winner: false,
-        }
-    ]
-}
+test("Should return initial state", () => {
+    expect(
+        reducer(undefined, {
+            type: undefined,
+        })
+    ).toEqual(initialState);
+});
 
-const mockMovieDataService = jest.spyOn(moviesDataService, 'getAllMovies');
-mockMovieDataService.mockImplementation(() => Promise.resolve({mockData}))
+describe("List all movies", () => {
+    // Arrange
+    beforeAll(() => {
+        testUtils.mockNetWorkResponse();
+    });
 
-test('should return the initial state', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({ "moviesList": [] })
-})
+    it("should be able to fetch the movies list", async () => {
+        // Act
+        const result = await store.dispatch(getAllMovies({ page: 0, pageSize: 2 }));
+        const movies = result.payload;
+        const state = store.getState();
 
-test('should return movie list', () => {
-    const previousState = []
+        // Arrange
+        expect(result.type).toBe("movies/getAll/fulfilled");
+        expect(movies).toEqual(testUtils.getAllMoviesResponse);
+        expect(state.movies.moviesList).toEqual(testUtils.getAllMoviesResponse);
+    });
+});
 
-    expect(reducer(previousState, getAllMovies())).toEqual({ "moviesList": mockData })
-})
+describe("List all years with multiple winners mocked", () => {
+    beforeAll(() => {
+        testUtils.mockNetWorkResponse();
+    });
+
+    it("should be able to fetch a list of years with multiple winners", async () => {
+        // Act
+        const result = await store.dispatch(getYearsWithMultipleWinners());
+        const yearsWithMultipleWinners = result.payload;
+        const state = store.getState();
+
+        // Assert
+        expect(result.type).toBe("movies/getYearsWithMultipleWinners/fulfilled");
+        expect(yearsWithMultipleWinners).toEqual(testUtils.getYearsWithMultipleWinnersResponse);
+        expect(state.movies.yearsWithMultipleWinners).toEqual(testUtils.getYearsWithMultipleWinnersResponse);
+    });
+});
+
+describe("List all years with multiple winners", () => {
+    beforeAll(() => {
+        testUtils.mockNetWorkResponse();
+    });
+
+    it("should be able to fetch a list of years with multiple winners", async () => {
+        // Act
+        const result = await store.dispatch(getYearsWithMultipleWinners());
+        const yearsWithMultipleWinners = result.payload;
+        const state = store.getState();
+
+        // Assert
+        expect(result.type).toBe("movies/getYearsWithMultipleWinners/fulfilled");
+        expect(yearsWithMultipleWinners).toEqual(testUtils.getYearsWithMultipleWinnersResponse);
+        expect(state.movies.yearsWithMultipleWinners).toEqual(testUtils.getYearsWithMultipleWinnersResponse);
+    });
+});
+
+describe("List all studios with most wins", () => {
+    // Arrange
+    beforeAll(() => {
+        testUtils.mockNetWorkResponse();
+    });
+
+    it("should be able to fetch a list of studios with multiple winners", async () => {
+        // Act
+        const result = await store.dispatch(getStudiosWithWinCount());
+        const studiosWithWinCount = result.payload;
+        const state = store.getState();
+
+        // Assert
+        expect(result.type).toBe("movies/getStudiosWithWinCount/fulfilled");
+        expect(studiosWithWinCount).toEqual(testUtils.getStudiosWithWinCountResponse);
+        expect(state.movies.studiosWithWinCont).toEqual(testUtils.getStudiosWithWinCountResponse);
+    });
+});
+
+describe("List max min intervals between producers wins", () => {
+    // Arrange
+    beforeAll(() => {
+        testUtils.mockNetWorkResponse();
+    });
+
+    it("should be able to fetch the lists with shortest and largest gaps between producers winning", async () => {
+        // Act
+        const result = await store.dispatch(getMaxMinWinIntervalForProducers());
+        const maxMinIntervalsWithWins = result.payload;
+        const state = store.getState();
+
+        // Assert
+        expect(result.type).toBe("movies/getMaxMinWinIntervalForProducers/fulfilled");
+        expect(maxMinIntervalsWithWins).toEqual(testUtils.getmaxMinWinIntervalForProducersResponse);
+        expect(state.movies.maxMinIntervalsWithWins).toEqual(testUtils.getmaxMinWinIntervalForProducersResponse);
+    });
+});
+
+describe("List winners by year", () => {
+    // Arrange
+    beforeAll(() => {
+        testUtils.mockNetWorkResponse();
+    });
+
+    it("should be able to fetch the lists of winners by year", async () => {
+        // Act
+        const result = await store.dispatch(getWinnersByYear(1992));
+        const winnersByYear = result.payload;
+        const state = store.getState();
+
+        // Assert
+        expect(result.type).toBe("movies/getWinnersByYear/fulfilled");
+        expect(winnersByYear).toEqual(testUtils.getWinnersByYearResponse);
+        expect(state.movies.winnersByYear).toEqual(testUtils.getWinnersByYearResponse);
+    });
+});

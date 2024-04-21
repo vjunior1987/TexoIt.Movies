@@ -52,7 +52,7 @@ export default function WinnersByYear() {
                         variant="contained"
                         sx={{ mt: 2.2, mb: 2 }}
                         onClick={searchWinnersByYear}
-                    ><SearchIcon />
+                    ><SearchIcon />search
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
