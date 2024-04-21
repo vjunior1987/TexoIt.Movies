@@ -93,3 +93,18 @@ Para testar as chamadas API, foi criado funções utilitárias para simular reto
 
 Ainda sobre chamadas RESTapi, foi decidido implementar eventos onde dados obtidos pela API são renderizados utilizando hooks e reducers com a biblioteca React-Redux. No componente Movies.js, o controle de eventos para paginação e filtros foi implementado da seguinte forma:
 
+
+    React.useEffect(() => {
+        dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
+    }, [dispatch, page]);
+
+    React.useEffect(() => {
+        dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
+    }, [year, winner])
+
+    React.useEffect(() => {
+        setPageSize(moviesList.totalPages);
+        setRows((moviesList.content ?? []).map((movie) => ({ id: movie.id, year: movie.year, title: movie.title, winner: movie.winner })));
+    }, [moviesList]);
+
+Para mais informações técnicas e sobre o framework, visite README.md contido no diretório movie-app
