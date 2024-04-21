@@ -43,7 +43,7 @@ export default function WinnersByYear() {
             </Typography>
             <Divider />
             <Grid container>
-                <Grid item xs={10} sx={{ padding: 2 }} >
+                <Grid item xs={9} sm={10} sx={{ padding: 2 }} >
                     <TextField fullWidth placeholder='Search by year' size='small' type='number'
                         onChange={(event) => setYear(event.target.value)} />
                 </Grid>
@@ -52,7 +52,7 @@ export default function WinnersByYear() {
                         variant="contained"
                         sx={{ mt: 2.2, mb: 2 }}
                         onClick={searchWinnersByYear}
-                    ><SearchIcon />search
+                    ><SearchIcon />
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
