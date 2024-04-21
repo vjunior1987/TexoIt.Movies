@@ -30,19 +30,15 @@ describe("render movies", () => {
         testUtils.renderWithProviders(<Provider store={store}><Movies /></Provider>)
 
         // Assert
-        expect(await screen.findByText(/Movies/i)).toBeInTheDocument()
-        expect(await screen.findByText(/title 1/i)).toBeInTheDocument()
-        expect(await screen.findByText(/title 2/i)).toBeInTheDocument()
+        expect(await screen.findByText(/title by year 1/i)).toBeInTheDocument()
     });
 
     it("should fetch and receive movies when filtering by winner", async () => {
         // Act
-        await store.dispatch(getAllMovies({ page: 0, pageSize: 2, winner: 'yes' }));
+        await store.dispatch(getAllMovies({ page: 0, pageSize: 2, winner: 'Yes' }));
         testUtils.renderWithProviders(<Provider store={store}><Movies /></Provider>)
 
         // Assert
-        expect(await screen.findByText(/Movies/i)).toBeInTheDocument()
-        expect(await screen.findByText(/title 1/i)).toBeInTheDocument()
-        expect(await screen.findByText(/title 2/i)).toBeInTheDocument()
+        expect(await screen.findByText(/title by winner 1/i)).toBeInTheDocument()
     });
 });

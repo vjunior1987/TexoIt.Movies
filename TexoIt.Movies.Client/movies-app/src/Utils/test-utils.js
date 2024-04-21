@@ -42,6 +42,34 @@ const getAllMoviesResponse = {
   ]
 };
 
+const getAllMoviesByYearResponse = {
+  totalPages: 1,
+  content: [
+    {
+      id: 2,
+      year: 1998,
+      title: 'title by year 1',
+      studios: ['studio 1', 'studio 2'],
+      producers: ['producer 1', 'producer 2'],
+      winner: false,
+    }
+  ]
+};
+
+const getAllMoviesByWinnerResponse = {
+  totalPages: 1,
+  content: [
+    {
+      id: 1,
+      year: 1992,
+      title: 'title by winner 1',
+      studios: ['studio 1', 'studio 2'],
+      producers: ['producer 1', 'producer 2'],
+      winner: true,
+    }
+  ]
+};
+
 const getYearsWithMultipleWinnersResponse = {
   years: [
     {
@@ -109,9 +137,8 @@ const mockNetWorkResponse = () => {
   const mock = new MockAdapter(http);
 
   mock.onGet(`?page=0&size=2`).reply(200, getAllMoviesResponse);
-  mock.onGet(`?page=0&size=2&year=1998`).reply(200, getAllMoviesResponse);
-  mock.onGet(`?page=0&size=2&winner=true`).reply(200, getAllMoviesResponse);
-  mock.onGet(`?page=0&size=2`).reply(200, getAllMoviesResponse);
+  mock.onGet(`?page=0&size=2&year=1998`).reply(200, getAllMoviesByYearResponse);
+  mock.onGet(`?page=0&size=2&winner=true`).reply(200, getAllMoviesByWinnerResponse);
   mock.onGet(`?projection=years-with-multiple-winners`).reply(200, getYearsWithMultipleWinnersResponse);
   mock.onGet(`?projection=studios-with-win-count`).reply(200, getStudiosWithWinCountResponse);
   mock.onGet(`?projection=max-min-win-interval-for-producers`).reply(200, getmaxMinWinIntervalForProducersResponse);
@@ -124,5 +151,7 @@ export {
   getYearsWithMultipleWinnersResponse,
   getStudiosWithWinCountResponse,
   getmaxMinWinIntervalForProducersResponse,
-  getWinnersByYearResponse
+  getWinnersByYearResponse,
+  getAllMoviesByYearResponse,
+  getAllMoviesByWinnerResponse
 };
