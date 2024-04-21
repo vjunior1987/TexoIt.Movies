@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react'
 import { Provider } from 'react-redux';
 import WinnersByYear from './WinnersByYear'
 // Arrange
-import { getWinnersByYear } from '../../Services/Movies/MoviesSlice';
+import { getWinnersByYear } from '../../Reducers/MoviesSlice';
 import * as testUtils from '../../Utils/test-utils';
 import store from '../../Services/store';
 

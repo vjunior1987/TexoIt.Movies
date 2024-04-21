@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMaxMinWinIntervalForProducers } from '../../Services/Movies/MoviesSlice';
+import { getMaxMinWinIntervalForProducers } from '../../Reducers/MoviesSlice';
 
 
 // Generate Order Data

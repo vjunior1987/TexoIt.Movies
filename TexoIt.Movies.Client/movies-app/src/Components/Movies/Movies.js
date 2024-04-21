@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllMovies } from '../../Services/Movies/MoviesSlice';
+import { getAllMovies } from '../../Reducers/MoviesSlice';
 import { debounce } from '@mui/material';
 
 export function Movies() {

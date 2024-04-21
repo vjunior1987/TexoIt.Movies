@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import movieDataService from './Movies.service';
+import movieDataService from '../Services/Movies/Movies.service';
 
 export const getAllMovies = createAsyncThunk('movies/getAll', async ({ page, pageSize, year, winner }) => {
     if (year && year !== '') {

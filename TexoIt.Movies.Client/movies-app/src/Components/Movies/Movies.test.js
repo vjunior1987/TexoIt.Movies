@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react'
 import { Provider } from 'react-redux';
 import { Movies } from './Movies'
 // Arrange
-import { getAllMovies } from '../../Services/Movies/MoviesSlice';
+import { getAllMovies } from '../../Reducers/MoviesSlice';
 import * as testUtils from '../../Utils/test-utils';
 import store from '../../Services/store';
 

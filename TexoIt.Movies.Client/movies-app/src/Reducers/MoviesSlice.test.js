@@ -7,8 +7,8 @@ import reducer, {
     getMaxMinWinIntervalForProducers,
     getWinnersByYear,
 } from './MoviesSlice';
-import * as testUtils from '../../Utils/test-utils';
-import store from '../store';
+import * as testUtils from '../Utils/test-utils';
+import store from '../Services/store';
 
 test("Should return initial state", () => {
     expect(
