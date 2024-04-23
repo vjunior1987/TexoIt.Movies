@@ -47,50 +47,72 @@ namespace TexoIt.Movies.Tests
         public async Task IntegrationTest_MoviesMustBeRetrievedCorrectAmountOfIntervalOnMin()
         {
             // Arrange
-            const int expected = 1;
+            var expected = producerWithMinInterval();
             // Act
             var moviesWinInterval = await _moviesService.GetMoviesWinIntervals();
             // Assert
-            Assert.NotNull(moviesWinInterval.Min.FirstOrDefault(x => x.Interval == expected));
+            Assert.NotNull(moviesWinInterval.Min.FirstOrDefault(x => x.Interval == expected.Interval));
         }
 
         [Fact]
         public async Task IntegrationTest_MoviesMustBeRetrievedCorrectAmountOfIntervalOnMax()
         {
             // Arrange
-            const int expected = 13;
+            var expected = producerWithMaxInterval();
             // Act
             var moviesWinInterval = await _moviesService.GetMoviesWinIntervals();
             // Assert
-            Assert.NotNull(moviesWinInterval.Max.FirstOrDefault(x => x.Interval == expected));
+            Assert.NotNull(moviesWinInterval.Max.FirstOrDefault(x => x.Interval == expected.Interval));
         }
 
-        private MovieIntervalDTO minMovie()
+        private MovieIntervalDTO producerWithMaxInterval()
         {
-            var producerInterval = moviesList.Where(m => m.Winner)
-                .ToList()
-                .SelectMany(m => m.Producer.Split(',').Select(p => new { Producer = p.Trim(), m.Year }))
+            return moviesList.Where(m => m.Winner)
+                .OrderBy(m => m.Year)
+                .SelectMany(m => m.Producer.Replace(" and ", ", ").Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p => new { Producer = p.Trim(), m.Year }))
                 .GroupBy(m => m.Producer)
-                .Select(g => new
+                .Select(m => new
                 {
-                    Producer = g.Key,
-                    Movies = g.OrderBy(m => m.Year).ToList()
+                    Producer = m.Key,
+                    Years = m.Select(m => m.Year).ToList()
                 })
                 .Select(m => new
                 {
                     m.Producer,
-                    IntervalInfo = m.Movies.Skip(1).Zip(m.Movies, (a, b) => new { Interval = a.Year - b.Year, PreviousWin = b.Year, FollowingWin = a.Year }).OrderBy(x => x.Interval).FirstOrDefault()
+                    IntervalInfo = m.Years.Skip(1).Select((y, i) => new { Interval = y - m.Years[i], PreviousWin = m.Years[i], FollowingWin = y })
+                .OrderByDescending(g => g.Interval).FirstOrDefault() ?? new { Interval = int.MinValue, PreviousWin = 0, FollowingWin = 0 }
+                }).Select(g => new MovieIntervalDTO
+                {
+                    Producer = g.Producer,
+                    Interval = g.IntervalInfo.Interval,
+                    PreviousWin = g.IntervalInfo.PreviousWin,
+                    FollowingWin = g.IntervalInfo.FollowingWin
+                }).OrderByDescending(m => m.Interval).FirstOrDefault();
+        }
+
+        private MovieIntervalDTO producerWithMinInterval()
+        {
+            return moviesList.Where(m => m.Winner)
+                .OrderBy(m => m.Year)
+                .SelectMany(m => m.Producer.Replace(" and ", ", ").Split(',', StringSplitOptions.RemoveEmptyEntries).Select(p => new { Producer = p.Trim(), m.Year }))
+                .GroupBy(m => m.Producer)
+                .Select(m => new
+                {
+                    Producer = m.Key,
+                    Years = m.Select(m => m.Year).ToList()
                 })
-                .Where(m => m.IntervalInfo != null)
-                .OrderBy(m => m.IntervalInfo?.Interval)
-                .FirstOrDefault();
-            return new MovieIntervalDTO
-            {
-                Producer = producerInterval.Producer,
-                Interval = producerInterval.IntervalInfo.Interval,
-                PreviousWin = producerInterval.IntervalInfo.PreviousWin,
-                FollowingWin = producerInterval.IntervalInfo.FollowingWin
-            };
+                .Select(m => new
+                {
+                    m.Producer,
+                    IntervalInfo = m.Years.Skip(1).Select((y, i) => new { Interval = y != m.Years[i] ? y - m.Years[i] : int.MaxValue, PreviousWin = m.Years[i], FollowingWin = y })
+                .OrderBy(g => g.Interval).FirstOrDefault() ?? new { Interval = int.MaxValue, PreviousWin = 0, FollowingWin = 0 }
+                }).Select(g => new MovieIntervalDTO
+                {
+                    Producer = g.Producer,
+                    Interval = g.IntervalInfo.Interval,
+                    PreviousWin = g.IntervalInfo.PreviousWin,
+                    FollowingWin = g.IntervalInfo.FollowingWin
+                }).OrderBy(m => m.Interval).FirstOrDefault();
         }
     }
 }
