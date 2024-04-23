@@ -17,28 +17,12 @@ namespace TexoIt.Movies.Data
             {
                 if (!context.Movies.Any())
                 {
-                    using (var reader = new StreamReader(@"movielist (2) (2) (2) (1) (1) (1) (1).csv"))
-                    {
-                        while (!reader.EndOfStream)
-                        {
-                            // Process each row
-                            string row = reader.ReadLine() ?? string.Empty;
-                            if (row.Contains("year;title;studios;producers;winner")) { continue; }
-                            string[] fields = row.Split(';');
-                            context.Movies.Add(new Movie
-                            {
-                                Id = Guid.NewGuid(),
-                                Year = Convert.ToInt32(fields[0]),
-                                Title = fields[1],
-                                Studios = fields[2],
-                                Producer = fields[3],
-                                Winner = fields.Length == 5
-                            });
-                        }
-                        context.SaveChanges();
-                    }
+                    var movies = Utils.RetrieveFromFile();
+                    context.AddRange(movies);
+                    context.SaveChanges();
                 }
             }
         }
     }
 }
+

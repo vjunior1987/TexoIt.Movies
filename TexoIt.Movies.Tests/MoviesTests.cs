@@ -1,13 +1,16 @@
 using TexoIt.Movies.Data;
 using TexoIt.Movies.Data.Context;
 using TexoIt.Movies.Data.Interface;
+using TexoIt.Movies.DTOs;
 using TexoIt.Movies.Services;
 
 namespace TexoIt.Movies.Tests
 {
+
     public class MoviesTests
     {
         // Arrange
+        private List<Movie> moviesList = Utils.RetrieveFromFile();
         private IMoviesRepository _moviesRepository;
         private IMoviesService _moviesService;
         private IDbInitializer _dbInitializer;
@@ -55,11 +58,39 @@ namespace TexoIt.Movies.Tests
         public async Task IntegrationTest_MoviesMustBeRetrievedCorrectAmountOfIntervalOnMax()
         {
             // Arrange
-            const int expected = 9;
+            const int expected = 13;
             // Act
             var moviesWinInterval = await _moviesService.GetMoviesWinIntervals();
             // Assert
             Assert.NotNull(moviesWinInterval.Max.FirstOrDefault(x => x.Interval == expected));
+        }
+
+        private MovieIntervalDTO minMovie()
+        {
+            var producerInterval = moviesList.Where(m => m.Winner)
+                .ToList()
+                .SelectMany(m => m.Producer.Split(',').Select(p => new { Producer = p.Trim(), m.Year }))
+                .GroupBy(m => m.Producer)
+                .Select(g => new
+                {
+                    Producer = g.Key,
+                    Movies = g.OrderBy(m => m.Year).ToList()
+                })
+                .Select(m => new
+                {
+                    m.Producer,
+                    IntervalInfo = m.Movies.Skip(1).Zip(m.Movies, (a, b) => new { Interval = a.Year - b.Year, PreviousWin = b.Year, FollowingWin = a.Year }).OrderBy(x => x.Interval).FirstOrDefault()
+                })
+                .Where(m => m.IntervalInfo != null)
+                .OrderBy(m => m.IntervalInfo?.Interval)
+                .FirstOrDefault();
+            return new MovieIntervalDTO
+            {
+                Producer = producerInterval.Producer,
+                Interval = producerInterval.IntervalInfo.Interval,
+                PreviousWin = producerInterval.IntervalInfo.PreviousWin,
+                FollowingWin = producerInterval.IntervalInfo.FollowingWin
+            };
         }
     }
 }
