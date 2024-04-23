@@ -2,7 +2,7 @@
 {
     public class MoviesWinIntervalsDTO
     {
-        public IEnumerable<MovieIntervalDTO> Min { get; set; }
-        public IEnumerable<MovieIntervalDTO> Max { get; set; }
+        public IEnumerable<MovieIntervalDTO> Min { get; set; } = new List<MovieIntervalDTO>();
+        public IEnumerable<MovieIntervalDTO> Max { get; set; } = new List<MovieIntervalDTO>();
     }
 }

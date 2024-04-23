@@ -36,7 +36,6 @@ namespace TexoIt.Movies.Tests
         [Fact]
         public async Task IntegrationTest_MoviesMustBeRetrievedWithMaximunInterval()
         {
-
             // Act
             var moviesWinInterval = await _moviesService.GetMoviesWinIntervals();
             // Assert
