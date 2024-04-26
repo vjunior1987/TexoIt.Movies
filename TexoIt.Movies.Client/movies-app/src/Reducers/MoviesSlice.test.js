@@ -35,6 +35,18 @@ describe("List all movies", () => {
         expect(movies).toEqual(testUtils.getAllMoviesResponse);
         expect(state.movies.moviesList).toEqual(testUtils.getAllMoviesResponse);
     });
+
+    it("should receive error when fetch fails", async () => {
+        // Act
+        const result = await store.dispatch(getAllMovies({ page: 0, pageSize: -1 }));
+        const err = result.error;
+        const state = store.getState();
+
+        // Arrange
+        expect(result.type).toBe("movies/getAll/rejected");
+        expect(err.message).toEqual(testUtils.getBadRequestResponse.message);
+        expect(state.movies.error.name).toEqual(testUtils.getBadRequestResponse.name);
+    });
 });
 
 describe("List all years with multiple winners mocked", () => {

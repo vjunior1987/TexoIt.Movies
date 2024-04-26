@@ -20,6 +20,11 @@ export function renderWithProviders(
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 
+const getBadRequestResponse = {
+  message: 'Request failed with status code 400',
+  name: 'Error'
+}
+
 const getAllMoviesResponse = {
   totalPages: 5,
   content: [
@@ -137,6 +142,7 @@ const mockNetWorkResponse = () => {
   const mock = new MockAdapter(http);
 
   mock.onGet(`?page=0&size=2`).reply(200, getAllMoviesResponse);
+  mock.onGet(`?page=0&size=-1`).reply(400);
   mock.onGet(`?page=0&size=2&year=1998`).reply(200, getAllMoviesByYearResponse);
   mock.onGet(`?page=0&size=2&winner=true`).reply(200, getAllMoviesByWinnerResponse);
   mock.onGet(`?projection=years-with-multiple-winners`).reply(200, getYearsWithMultipleWinnersResponse);
@@ -153,5 +159,6 @@ export {
   getmaxMinWinIntervalForProducersResponse,
   getWinnersByYearResponse,
   getAllMoviesByYearResponse,
-  getAllMoviesByWinnerResponse
+  getAllMoviesByWinnerResponse,
+  getBadRequestResponse
 };
