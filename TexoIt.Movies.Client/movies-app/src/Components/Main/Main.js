@@ -14,9 +14,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
 import { useSelector } from 'react-redux';
-
+import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-
 import Dashboard from '../Dashboard';
 import Movies from '../Movies';
 
@@ -72,7 +71,8 @@ export default function Main() {
   const snackInitialState = {
     key: undefined,
     open: false,
-    message: ''
+    message: '',
+    type: ''
   };
 
   const [open, setOpen] = React.useState(true);
@@ -93,6 +93,7 @@ export default function Main() {
         key: error.code,
         open: true,
         message: error.message,
+        type: 'error'
       });
     }
   }, [error])
@@ -104,8 +105,15 @@ export default function Main() {
         open={snackState.open}
         autoHideDuration={4000}
         onClose={handleCloseSnack}
-        message={snackState.message}
-      />
+      >
+        <Alert
+          severity={snackState.type}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackState.message}
+        </Alert>
+      </Snackbar>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
