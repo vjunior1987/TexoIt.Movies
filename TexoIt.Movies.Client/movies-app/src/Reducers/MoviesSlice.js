@@ -34,6 +34,7 @@ export const getWinnersByYear = createAsyncThunk('movies/getWinnersByYear', asyn
 });
 
 export const initialState = {
+    error: '',
     moviesList: {},
     yearsWithMultipleWinners: {},
     studiosWithWinCont: {},
@@ -44,24 +45,44 @@ export const initialState = {
 export const moviesSlice = createSlice({
     name: 'movies',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        resetError: (state) => {
+            state.error = '';
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getAllMovies.fulfilled, (state, action) => {
             state.moviesList = action.payload;
         });
+        builder.addCase(getAllMovies.rejected, (state, action) => {
+            state.error = action.error;
+        });
         builder.addCase(getYearsWithMultipleWinners.fulfilled, (state, action) => {
             state.yearsWithMultipleWinners = action.payload;
+        });
+        builder.addCase(getYearsWithMultipleWinners.rejected, (state, action) => {
+            state.error = action.error;
         });
         builder.addCase(getStudiosWithWinCount.fulfilled, (state, action) => {
             state.studiosWithWinCont = action.payload;
         });
+        builder.addCase(getStudiosWithWinCount.rejected, (state, action) => {
+            state.error = action.error;
+        });
         builder.addCase(getMaxMinWinIntervalForProducers.fulfilled, (state, action) => {
             state.maxMinIntervalsWithWins = action.payload;
+        });
+        builder.addCase(getMaxMinWinIntervalForProducers.rejected, (state, action) => {
+            state.error = action.error;
         });
         builder.addCase(getWinnersByYear.fulfilled, (state, action) => {
             state.winnersByYear = [...action.payload];
         });
+        builder.addCase(getWinnersByYear.rejected, (state, action) => {
+            state.error = action.error;
+        });
     }
 })
 
+export const { resetError } = moviesSlice.actions;
 export default moviesSlice.reducer

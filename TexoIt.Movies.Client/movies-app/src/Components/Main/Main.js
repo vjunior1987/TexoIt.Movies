@@ -13,6 +13,9 @@ import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems } from './listItems';
+import { useSelector } from 'react-redux';
+
+import Snackbar from '@mui/material/Snackbar';
 
 import Dashboard from '../Dashboard';
 import Movies from '../Movies';
@@ -66,12 +69,43 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function Main() {
+  const snackInitialState = {
+    key: undefined,
+    open: false,
+    message: ''
+  };
+
   const [open, setOpen] = React.useState(true);
+  const [snackState, setSnackState] = React.useState(snackInitialState);
+  const error = useSelector((state) => state.movies.error);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+  const handleCloseSnack = () => {
+    setSnackState(snackInitialState)
+  }
+
+  React.useEffect(() => {
+    if (error.message && snackState.message != error.message) {
+      setSnackState({
+        key: error.code,
+        open: true,
+        message: error.message,
+      });
+    }
+  }, [error])
+
   return (
+    <>
+      <Snackbar
+        key={snackState.key}
+        open={snackState.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnack}
+        message={snackState.message}
+      />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
@@ -145,5 +179,6 @@ export default function Main() {
           </Container>
         </Box>
       </Box>
+    </>
   );
 }
