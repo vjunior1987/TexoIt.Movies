@@ -12,28 +12,28 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useSelector, useDispatch } from 'react-redux';
-import { getWinnersByYear } from '../../Reducers/MoviesSlice';
+import { getWinnersByYear } from '../../Reducers/Slices/moviesSlice';
+import { winnerByYear } from '../../Utils/customDataTypes';
 
-// Generate Order Data
-function createData(id, year, title) {
+function createData(id: number, year: number, title: string): winnerByYear {
     return { id, year, title };
 }
 
 export default function WinnersByYear() {
-    const winnersByYear = useSelector((state) => state.movies.winnersByYear);
+    const winnersByYear = useSelector((state: any) => state.movies.winnersByYear) as winnerByYear[];
     const dispatch = useDispatch();
 
-    const [rows, setRows] = React.useState([]);
+    const [rows, setRows] = React.useState(Array<winnerByYear>);
     const [year, setYear] = React.useState('');
 
     const searchWinnersByYear = () => {
         if (year && year !== '') {
-            dispatch(getWinnersByYear(year));
+            dispatch(getWinnersByYear(year) as any);
         }
     }
 
     React.useEffect(() => {
-        setRows((winnersByYear ?? []).map((winner) => createData(winner.id, winner.year, winner.title) ));
+        setRows((winnersByYear ?? []).map((winner) => createData(winner.id, winner.year, winner.title)));
     }, [winnersByYear]);
 
     return (

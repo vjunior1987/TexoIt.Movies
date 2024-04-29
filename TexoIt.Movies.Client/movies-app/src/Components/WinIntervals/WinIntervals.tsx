@@ -8,28 +8,27 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMaxMinWinIntervalForProducers } from '../../Reducers/MoviesSlice';
+import { getMaxMinWinIntervalForProducers } from '../../Reducers/Slices/moviesSlice';
+import { maxMinIntervalsWithWins, IntervalWithWins } from '../../Utils/customDataTypes';
 
-
-// Generate Order Data
-function createData(producer, interval, previousWin, followingWin) {
+function createData(producer: string, interval: number, previousWin: number, followingWin: number): IntervalWithWins {
     return { producer, interval, previousWin, followingWin };
 }
 
 export default function WinIntervals() {
-    const maxMinIntervalsWithWins = useSelector((state) => state.movies.maxMinIntervalsWithWins);
+    const maxMinIntervalsWithWins = useSelector((state: any) => state.movies.maxMinIntervalsWithWins) as maxMinIntervalsWithWins;
     const dispatch = useDispatch();
 
-    const [rowsMax, setRowsMax] = React.useState([]);
-    const [rowsMin, setRowsMin] = React.useState([]);
+    const [rowsMax, setRowsMax] = React.useState(Array<IntervalWithWins>);
+    const [rowsMin, setRowsMin] = React.useState(Array<IntervalWithWins>);
 
     React.useEffect(() => {
-        dispatch(getMaxMinWinIntervalForProducers());
+        dispatch(getMaxMinWinIntervalForProducers() as any);
     }, []);
 
     React.useEffect(() => {
-        setRowsMax((maxMinIntervalsWithWins.max ?? []).map((producer) => createData(producer.producer, producer.interval, producer.previousWin, producer.followingWin)));
-        setRowsMin((maxMinIntervalsWithWins.min ?? []).map((producer) => createData(producer.producer, producer.interval, producer.previousWin, producer.followingWin)))
+        setRowsMax((maxMinIntervalsWithWins?.max ?? []).map((producer) => createData(producer.producer, producer.interval, producer.previousWin, producer.followingWin)));
+        setRowsMin((maxMinIntervalsWithWins?.min ?? []).map((producer) => createData(producer.producer, producer.interval, producer.previousWin, producer.followingWin)))
     }, [maxMinIntervalsWithWins]);
 
     return (

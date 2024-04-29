@@ -13,11 +13,16 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllMovies } from '../../Reducers/MoviesSlice';
+import { getAllMovies } from '../../Reducers/Slices/moviesSlice';
+import { movie } from '../../Utils/customDataTypes';
 import { debounce } from '@mui/material';
 
+export function createData(id: number, year: number, title: string, winner: boolean): movie {
+    return { id, year, title, winner };
+}
+
 export function Movies() {
-    const moviesList = useSelector((state) => state.movies.moviesList);
+    const moviesList = useSelector((state: any) => state.movies.moviesList);
     const dispatch = useDispatch();
 
     const [rows, setRows] = React.useState([]);
@@ -27,20 +32,20 @@ export function Movies() {
     const [pageCount, setPageSize] = React.useState(0);
 
     React.useEffect(() => {
-        dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
+        dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }) as any);
     }, [page]);
 
     React.useEffect(() => {
         if (page > 1) {
             setPage(1);
         } else {
-            dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
+            dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }) as any);
         }
     }, [year, winner])
 
     React.useEffect(() => {
         setPageSize(moviesList.totalPages);
-        setRows((moviesList.content ?? []).map((movie) => ({ id: movie.id, year: movie.year, title: movie.title, winner: movie.winner })));
+        setRows((moviesList.content ?? []).map((movie: movie) => ({ id: movie.id, year: movie.year, title: movie.title, winner: movie.winner })));
     }, [moviesList]);
 
     return (
@@ -68,7 +73,7 @@ export function Movies() {
                                     <TableCell sx={{ pb: 5.8 }}>Title</TableCell>
                                     <TableCell>Winner
                                         <br />
-                                        <Select size='small' type='boolean' onChange={(event) => setWinner(event.target.value)}>
+                                        <Select size='small' type='boolean' onChange={(event) => setWinner(event.target.value as string)}>
                                             <MenuItem>N/A</MenuItem>
                                             <MenuItem value={'Yes'}>Yes</MenuItem>
                                             <MenuItem value={'No'}>No</MenuItem>
@@ -77,7 +82,7 @@ export function Movies() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.map((row) => (
+                                {rows.map((row: movie) => (
                                     <TableRow key={row.id}>
                                         <TableCell>{row.id}</TableCell>
                                         <TableCell>{row.year}</TableCell>

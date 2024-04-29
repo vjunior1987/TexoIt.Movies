@@ -5,8 +5,12 @@ import { render } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { setupStore } from '../Services/store'
 
+type wrapperType = {
+  children: any
+}
+
 export function renderWithProviders(
-  ui,
+  ui: any,
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
@@ -14,8 +18,8 @@ export function renderWithProviders(
     ...renderOptions
   } = {}
 ) {
-  function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>
+  function Wrapper(arg: wrapperType) {
+    return <Provider store={store}>{arg.children}</Provider>
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
 }

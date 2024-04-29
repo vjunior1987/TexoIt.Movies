@@ -6,14 +6,14 @@ import reducer, {
     getStudiosWithWinCount,
     getMaxMinWinIntervalForProducers,
     getWinnersByYear,
-} from './MoviesSlice';
-import * as testUtils from '../Utils/test-utils';
-import store from '../Services/store';
+} from './moviesSlice';
+import * as testUtils from '../../Utils/test-utils';
+import store from '../../Services/store';
 
 test("Should return initial state", () => {
     expect(
         reducer(undefined, {
-            type: undefined,
+            type: '',
         })
     ).toEqual(initialState);
 });
@@ -26,7 +26,7 @@ describe("List all movies", () => {
 
     it("should be able to fetch the movies list", async () => {
         // Act
-        const result = await store.dispatch(getAllMovies({ page: 0, pageSize: 2 }));
+        const result = await store.dispatch(getAllMovies({ page: 0, pageSize: 2  }));
         const movies = result.payload;
         const state = store.getState();
 
@@ -38,7 +38,7 @@ describe("List all movies", () => {
 
     it("should receive error when fetch fails", async () => {
         // Act
-        const result = await store.dispatch(getAllMovies({ page: 0, pageSize: -1 }));
+        const result = await store.dispatch(getAllMovies({ page: 0, pageSize: -1 })) as any;
         const err = result.error;
         const state = store.getState();
 
@@ -100,7 +100,7 @@ describe("List all studios with most wins", () => {
         // Assert
         expect(result.type).toBe("movies/getStudiosWithWinCount/fulfilled");
         expect(studiosWithWinCount).toEqual(testUtils.getStudiosWithWinCountResponse);
-        expect(state.movies.studiosWithWinCont).toEqual(testUtils.getStudiosWithWinCountResponse);
+        expect(state.movies.studiosWithWinCount).toEqual(testUtils.getStudiosWithWinCountResponse);
     });
 });
 
@@ -131,7 +131,7 @@ describe("List winners by year", () => {
 
     it("should be able to fetch the lists of winners by year", async () => {
         // Act
-        const result = await store.dispatch(getWinnersByYear(1992));
+        const result = await store.dispatch(getWinnersByYear('1992'));
         const winnersByYear = result.payload;
         const state = store.getState();
 

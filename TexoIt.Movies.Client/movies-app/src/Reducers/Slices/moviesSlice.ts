@@ -1,14 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import movieDataService from '../Services/Movies/Movies.service';
+import movieDataService from '../../Services/Movies/movies.service';
 
-export const getAllMovies = createAsyncThunk('movies/getAll', async ({ page, pageSize, year, winner }) => {
-    if (year && year !== '') {
-        year = `&year=${year}`;
+type getAllMoviesArgs = {
+    page: number,
+    pageSize: number,
+    year?: string,
+    winner?: string
+}
+
+export type moviesState = {
+    error: {},
+    moviesList: {},
+    yearsWithMultipleWinners: {},
+    studiosWithWinCount: {},
+    
+    maxMinIntervalsWithWins: {},
+    winnersByYear: [],
+}
+export const getAllMovies = createAsyncThunk('movies/getAll', async (args: getAllMoviesArgs) => {
+    if (args?.year && args.year !== '') {
+        args.year = `&year=${args.year}`;
     }
-    if (winner && winner !== '') {
-        winner = winner === 'Yes' ? '&winner=true' : '&winner=false'
+    if (args?.winner && args.winner !== '') {
+        args.winner = args.winner === 'Yes' ? '&winner=true' : '&winner=false'
     }
-    const response = await movieDataService.getAllMovies(page, pageSize, year, winner);
+    const response = await movieDataService.getAllMovies(args.page, args.pageSize, args.year, args.winner);
     return response.data;
 });
 
@@ -28,16 +44,16 @@ export const getMaxMinWinIntervalForProducers = createAsyncThunk('movies/getMaxM
     return response.data;
 });
 
-export const getWinnersByYear = createAsyncThunk('movies/getWinnersByYear', async (year) => {
+export const getWinnersByYear = createAsyncThunk('movies/getWinnersByYear', async (year: string) => {
     const response = await movieDataService.getWinnersByYear(year);
     return response.data;
 });
 
 export const initialState = {
-    error: '',
+    error: {},
     moviesList: {},
     yearsWithMultipleWinners: {},
-    studiosWithWinCont: {},
+    studiosWithWinCount: {},
     maxMinIntervalsWithWins: {},
     winnersByYear: [],
 }
@@ -64,7 +80,7 @@ export const moviesSlice = createSlice({
             state.error = action.error;
         });
         builder.addCase(getStudiosWithWinCount.fulfilled, (state, action) => {
-            state.studiosWithWinCont = action.payload;
+            state.studiosWithWinCount = action.payload;
         });
         builder.addCase(getStudiosWithWinCount.rejected, (state, action) => {
             state.error = action.error;
@@ -76,7 +92,7 @@ export const moviesSlice = createSlice({
             state.error = action.error;
         });
         builder.addCase(getWinnersByYear.fulfilled, (state, action) => {
-            state.winnersByYear = [...action.payload];
+            state.winnersByYear = [...action.payload] as Array<never>;
         });
         builder.addCase(getWinnersByYear.rejected, (state, action) => {
             state.error = action.error;

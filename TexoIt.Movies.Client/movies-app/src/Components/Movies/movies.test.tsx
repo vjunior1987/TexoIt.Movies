@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react'
 import { Provider } from 'react-redux';
 import { Movies } from './Movies'
 // Arrange
-import { getAllMovies } from '../../Reducers/MoviesSlice';
+import { getAllMovies } from '../../Reducers/Slices/moviesSlice';
 import * as testUtils from '../../Utils/test-utils';
 import store from '../../Services/store';
 
@@ -15,7 +15,7 @@ describe("render movies", () => {
 
     it("should fetch and receive movies when opening the page", async () => {
         // Act
-        await store.dispatch(getAllMovies({ page: 0, pageSize: 2 }));
+        await store.dispatch(getAllMovies({ page: 0, pageSize: 2, winner: '', year: '' }));
         testUtils.renderWithProviders(<Provider store={store}><Movies /></Provider>)
 
         // Assert
@@ -26,7 +26,7 @@ describe("render movies", () => {
 
     it("should fetch and receive movies when filtering by year", async () => {
         // Act
-        await store.dispatch(getAllMovies({ page: 0, pageSize: 2, year: '1998' }));
+        await store.dispatch(getAllMovies({ page: 0, pageSize: 2 }));
         testUtils.renderWithProviders(<Provider store={store}><Movies /></Provider>)
 
         // Assert

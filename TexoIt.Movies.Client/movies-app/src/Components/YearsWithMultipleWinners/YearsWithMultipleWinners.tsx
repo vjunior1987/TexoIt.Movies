@@ -8,26 +8,25 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useSelector, useDispatch } from 'react-redux';
-import { getYearsWithMultipleWinners } from '../../Reducers/MoviesSlice';
+import { getYearsWithMultipleWinners } from '../../Reducers/Slices/moviesSlice';
+import { year, yearsWithMultipleWinners } from '../../Utils/customDataTypes';
 
-
-// Generate Order Data
-function createData(year, winnerCount) {
+function createData(year: number, winnerCount: number): year {
   return { year, winnerCount };
 }
 
 export default function YearsWithMultipleWinners() {
-  const yearsWithMultipleWinners = useSelector((state) => state.movies.yearsWithMultipleWinners);
+  const yearsWithMultipleWinners = useSelector((state: any) => state.movies.yearsWithMultipleWinners) as yearsWithMultipleWinners;
   const dispatch = useDispatch();
-  
-  const [rows, setRows] = React.useState([]);
+
+  const [rows, setRows] = React.useState(Array<year>);
 
   React.useEffect(() => {
-    dispatch(getYearsWithMultipleWinners());
+    dispatch(getYearsWithMultipleWinners() as any);
   }, []);
 
   React.useEffect(() => {
-    setRows((yearsWithMultipleWinners.years ?? []).map((year) => createData(year.year, year.winnerCount)));
+    setRows((yearsWithMultipleWinners?.years ?? []).map((year: any) => createData(year.year, year.winnerCount)));
   }, [yearsWithMultipleWinners]);
 
 

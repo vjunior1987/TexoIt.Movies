@@ -8,26 +8,26 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useSelector, useDispatch } from 'react-redux';
-import { getStudiosWithWinCount } from '../../Reducers/MoviesSlice';
+import { getStudiosWithWinCount } from '../../Reducers/Slices/moviesSlice';
+import { studio, studiosWithWinCount } from '../../Utils/customDataTypes';
 
-// Generate Order Data
-function createData(name, winCount) {
+function createData(name: string, winCount: number) : studio {
     return { name, winCount };
 }
 
 export default function TopThreeStudios() {
-    const studiosWithWinCont = useSelector((state) => state.movies.studiosWithWinCont);
+    const studiosWithWinCount = useSelector((state: any) => state.movies.studiosWithWinCount) as studiosWithWinCount;
     const dispatch = useDispatch();
 
-    const [rows, setRows] = React.useState([]);
+    const [rows, setRows] = React.useState(Array<studio>);
     
     React.useEffect(() => {
-        dispatch(getStudiosWithWinCount());
+        dispatch(getStudiosWithWinCount() as any);
     }, [])
 
     React.useEffect(() => {
-        setRows((studiosWithWinCont.studios ?? []).slice(0, 3).map((studio) => createData(studio.name, studio.winCount) ));
-    }, [studiosWithWinCont])
+        setRows((studiosWithWinCount?.studios ?? []).slice(0, 3).map((studio) => createData(studio.name, studio.winCount) ));
+    }, [studiosWithWinCount])
     
     return (
         <React.Fragment>
