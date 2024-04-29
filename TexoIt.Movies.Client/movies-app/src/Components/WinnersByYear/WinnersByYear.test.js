@@ -17,6 +17,6 @@ describe("render winners by year", () => {
         // Act
         await store.dispatch(getWinnersByYear(1992));
         testUtils.renderWithProviders(<Provider store={store}><WinnersByYear /></Provider>)
-        expect(await screen.findByText(/List moviers by year/i)).toBeInTheDocument()
+        expect(await screen.findByText(/List movie winners by year/i)).toBeInTheDocument()
     });
 });
