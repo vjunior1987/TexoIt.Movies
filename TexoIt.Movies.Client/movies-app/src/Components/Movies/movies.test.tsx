@@ -26,7 +26,7 @@ describe("render movies", () => {
 
     it("should fetch and receive movies when filtering by year", async () => {
         // Act
-        await store.dispatch(getAllMovies({ page: 0, pageSize: 2 }));
+        await store.dispatch(getAllMovies({ page: 0, pageSize: 2, year: '1998' }));
         testUtils.renderWithProviders(<Provider store={store}><Movies /></Provider>)
 
         // Assert
