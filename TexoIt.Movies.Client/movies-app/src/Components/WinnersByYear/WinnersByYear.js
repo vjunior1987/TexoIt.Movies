@@ -39,7 +39,7 @@ export default function WinnersByYear() {
     return (
         <React.Fragment>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                List moviers by year
+                List movie winners by year
             </Typography>
             <Divider />
             <Grid container>

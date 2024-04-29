@@ -28,10 +28,14 @@ export function Movies() {
 
     React.useEffect(() => {
         dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
-    }, [dispatch, page]);
+    }, [page]);
 
     React.useEffect(() => {
-        dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
+        if (page > 1) {
+            setPage(1);
+        } else {
+            dispatch(getAllMovies({ page: page - 1, pageSize: 12, year, winner }));
+        }
     }, [year, winner])
 
     React.useEffect(() => {
@@ -84,7 +88,7 @@ export function Movies() {
                             </TableBody>
                         </Table>
                         <Stack spacing={2}>
-                            <Pagination color='primary' count={pageCount} onChange={(event, page) => setPage(page)} />
+                            <Pagination page={page} color='primary' count={pageCount} onChange={(event, page) => setPage(page)} />
                         </Stack>
                     </Paper>
                 </Grid>
